@@ -21,6 +21,7 @@ If you would like to cite our paper, please use the following bibtex:
 * CUDA 9.2
 * [PyTorch](http://pytorch.org/) version 1.6.0
 * [torchvision](https://github.com/pytorch/vision/)
+* Optional: [seaborn](https://seaborn.pydata.org/) installed from GitHub to replicate plots, see [reqirements file](https://github.com/pasta41/deception/blob/main/src/plot/requirements.txt)
 
 ## Codebase Structure Overview
 This codebase includes the following sections:
@@ -55,6 +56,8 @@ The runner scripts and related code for our defense expeirments are in the [`def
 ## Regenerating our Paper's Plots
 
 We have included a Jupyter notebook containing the relevant plotting code that we used to generate the figures in the paper -- both the main paper and Supplementary Material. Please refer to the [`plot`](https://github.com/pasta41/deception/tree/main/src/plot) directory.
+
+**Note:** The plots require installation of `seaborn` directly from GitHub, as it uses [errorbar plotting features](https://github.com/mwaskom/seaborn/issues/2403) not included in v0.11.2. A requirements file is provided, which installs the plotting code dependencies,  [`plot\requirements.txt`](https://github.com/pasta41/deception/tree/main/src/plot/requirements.txt).
 
 ## Visualization Using Tensorboard
 The code will stream the metrics into the log files. If tensorboard is specified, one can run the following command to see the results:
