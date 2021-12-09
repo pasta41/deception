@@ -21,6 +21,7 @@ If you would like to cite our paper, please use the following bibtex:
 * CUDA 9.2
 * [PyTorch](http://pytorch.org/) version 1.6.0
 * [torchvision](https://github.com/pytorch/vision/)
+* Optional: [seaborn](https://seaborn.pydata.org/) installed from GitHub to replicate plots, see [reqirements file](https://github.com/pasta41/deception/blob/main/src/plot/requirements.txt)
 
 ## Codebase Structure Overview
 This codebase includes the following sections:
