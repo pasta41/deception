@@ -15,14 +15,14 @@ sns.set_context('talk')
 # In[2]:
 
 
-sgd_hb = pd.read_csv('Results for HyperDeception - Wilson--ICML21.csv')
+sgd_hb = pd.read_csv('../../logs/vgg16_cifar10_constant_epsilon.csv')
 
 
 # In[3]:
 
 
 sgd_hb.columns=['optimizer', 'initial learning rate', 1,2,3,4,5,'mean','std']
-sgd_hb.replace({'HB': 'Heavy Ball (HB)'}, inplace=True)
+sgd_hb.replace({'HB': 'Heavy Ball\n(HB)'}, inplace=True)
 
 
 # In[4]:
@@ -82,7 +82,7 @@ sgd_hb_plot = pd.melt(sgd_hb.loc[max_locs], id_vars=['optimizer', 'initial learn
 # In[13]:
 
 
-adam = pd.read_csv('Results for HyperDeception - Wilson-NeurIPS21.csv')
+adam = pd.read_csv('../../logs/vgg16_cifar10_varying_epsilon.csv')
 
 
 # In[14]:
@@ -148,7 +148,7 @@ to_concat = pd.melt(adam_to_plot, id_vars=['Ours'], value_vars=[1,2,3,4,5])
 
 
 to_concat = to_concat.rename(columns={'Ours':'optimizer'})
-to_concat['optimizer'].replace({False:'Adam: Wilson', True:'Adam: Ours'}, inplace=True)
+to_concat['optimizer'].replace({False:'Adam:\nHPO Config. 1', True:'Adam:\nHPO Config. 2'}, inplace=True)
 
 
 # In[24]:
@@ -162,20 +162,30 @@ plot['Accuracy'] = plot["Accuracy"].astype(float)
 # In[25]:
 
 
-f, ax = plt.subplots(figsize=[9,5])
-sns.boxplot(data=plot,x='Optimizer', y='Accuracy',palette='Blues')
+f, ax = plt.subplots(figsize=[7,5])
+sns.boxplot(data=plot[plot['Optimizer']!='Adam:\nHPO Config. 2'],x='Optimizer', y='Accuracy',palette='Blues')
 plt.ylim([90,93])
 plt.tight_layout()
-plt.savefig('wilson_plot.pdf')
+plt.savefig('VGG_HPO_Plot1.pdf')
 
 
 # In[26]:
 
 
-adam['e_epsilon'] = adam['epsilon'].apply(lambda x: '{:.0e}'.format(x))
+f, ax = plt.subplots(figsize=[7,5])
+sns.boxplot(data=plot[plot['Optimizer']!='Adam:\nHPO Config. 1'],x='Optimizer', y='Accuracy',palette='Blues')
+plt.ylim([90,93])
+plt.tight_layout()
+plt.savefig('VGG_HPO_Plot2.pdf')
 
 
 # In[27]:
+
+
+adam['e_epsilon'] = adam['epsilon'].apply(lambda x: '{:.0e}'.format(x))
+
+
+# In[28]:
 
 
 f, ax = plt.subplots(figsize=[10,7])
@@ -191,7 +201,7 @@ plt.tight_layout()
 plt.savefig('full_wilson_results.pdf')
 
 
-# In[28]:
+# In[29]:
 
 
 f, ax = plt.subplots(figsize=[10,7])
@@ -207,20 +217,20 @@ plt.tight_layout()
 plt.savefig('sota_wilson_results.pdf')
 
 
-# In[29]:
+# In[30]:
 
 
 adam['scaled_lr'] = adam['initial learning rate'] / adam['epsilon']
 
 
-# In[30]:
+# In[31]:
 
 
 adam['e_lr'] = adam['initial learning rate'].apply(lambda x: '{:.0e}'.format(x))
 adam['e_slr'] = adam['scaled_lr'].apply(lambda x: '{:.0e}'.format(x))
 
 
-# In[31]:
+# In[32]:
 
 
 for i, epsilon_val in enumerate(adam[adam['Ours']]['e_epsilon'].unique()):
@@ -242,7 +252,7 @@ for i, epsilon_val in enumerate(adam[adam['Ours']]['e_epsilon'].unique()):
     plt.savefig('adam_tuned_table_{}.pdf'.format(epsilon_val))
 
 
-# In[32]:
+# In[33]:
 
 
 for i, epsilon_val in enumerate(adam[~adam['Ours']]['e_epsilon'].unique()):
@@ -264,7 +274,7 @@ for i, epsilon_val in enumerate(adam[~adam['Ours']]['e_epsilon'].unique()):
     plt.savefig('adam_tuned_table_{}.pdf'.format(epsilon_val))
 
 
-# In[33]:
+# In[34]:
 
 
 from matplotlib.ticker import ScalarFormatter
@@ -281,7 +291,7 @@ plt.tight_layout()
 plt.savefig('full_our_adam_results.pdf')
 
 
-# In[34]:
+# In[35]:
 
 
 for optimizer in sgd_hb['optimizer'].unique():
@@ -297,7 +307,7 @@ for optimizer in sgd_hb['optimizer'].unique():
     plt.savefig('{}_tuned_table.pdf'.format(optimizer))
 
 
-# In[35]:
+# In[36]:
 
 
 f, ax = plt.subplots(figsize=[10,6])
@@ -312,19 +322,19 @@ plt.tight_layout()
 plt.savefig('full_sgd_hb_results.pdf')
 
 
-# In[36]:
-
-
-defense = pd.read_csv('Results for HyperDeception - Defense--NeurIPS21.csv', index_col=0)
-
-
 # In[37]:
+
+
+defense = pd.read_csv('../../logs/new-defense-with-large-eps.csv', index_col=0)
+
+
+# In[38]:
 
 
 defense_accuracy = defense[['Unnamed: 2', 'Unnamed: 5', 'Unnamed: 8']]
 
 
-# In[38]:
+# In[39]:
 
 
 defense_adam = defense[['Adam', 'Unnamed: 7', 'Unnamed: 8']].loc[1:]
@@ -352,7 +362,7 @@ for i in range(3):
     plt.savefig('defense_adam_{}_{}.pdf'.format(start_loc,end_loc))
 
 
-# In[39]:
+# In[40]:
 
 
 defense_hb = defense[['HB', 'Unnamed: 4', 'Unnamed: 5']].loc[1:]
@@ -377,7 +387,7 @@ for i in range(3):
     plt.savefig('defense_hb_{}_{}.pdf'.format(start_loc,end_loc))
 
 
-# In[40]:
+# In[41]:
 
 
 defense_sgd = defense[['SGD', 'Unnamed: 2']]
@@ -407,7 +417,7 @@ for i in range(3):
     plt.savefig('defense_sgd_{}_{}.pdf'.format(start_loc,end_loc))
 
 
-# In[41]:
+# In[42]:
 
 
 defense_accuracy.columns = ['SGD', 'Heavy Ball (HB)', 'Adam']
@@ -415,19 +425,19 @@ defense_accuracy = defense_accuracy.loc[1:]
 defense_accuracy.index = defense_accuracy.index.astype(int)
 
 
-# In[42]:
+# In[43]:
 
 
 hb_wins = defense_accuracy['Adam'] <  defense_accuracy['Heavy Ball (HB)']
 
 
-# In[43]:
+# In[44]:
 
 
 sgd_wins = defense_accuracy['Adam'] <  defense_accuracy['SGD']
 
 
-# In[44]:
+# In[45]:
 
 
 for i in range(4):
@@ -445,7 +455,7 @@ for i in range(4):
     plt.savefig('adam_sgd_defense_test_{}_{}.pdf'.format(start_loc, end_loc))
 
 
-# In[45]:
+# In[46]:
 
 
 for i in range(4):
